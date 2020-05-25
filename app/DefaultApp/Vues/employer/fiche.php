@@ -21,8 +21,6 @@
             $ser=new \app\DefaultApp\Models\Service();
             $ser=$ser->findById($ep->getService());
 
-            $cser=new \app\DefaultApp\Models\CategorieService();
-            $cser=$cser->findById($ep->getId());
             ?>
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -257,7 +255,7 @@
                                         <th>Catégorie</th>
                                         <td>
                                             <select name="role" class="form-control ccc" required>
-                                                <option value="<?php echo $cser->getId(); ?>"><?php echo $cser->getCategorie(); ?></option>
+
                                             </select>
                                         </td>
                                     </tr>

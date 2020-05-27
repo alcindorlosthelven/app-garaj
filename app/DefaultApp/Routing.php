@@ -13,6 +13,14 @@ App::post("/modifier-client-:id", "client.modifier", "modifier_client")->avec("i
 App::get("/fiche-client-:id", "client.fiche", "fiche_client")->avec("id","[0-9]+");
 //fin client
 
+//vente
+App::get("/vente", "vente.lister", "vente");
+App::get("/ajouter-vente-:id", "vente.ajouter", "ajouter_vente")->avec("id",'[0-9]+');
+App::get("/lister-vente", "vente.lister", "lister_vente");
+App::get("/imprimer-facture-vente-:id", "print.imprimer")->avec("id",'[0-9]+');
+App::get("/facture-vente-:id", "vente.factureVente","facture_vente")->avec("id",'[0-9]+');
+//fin vente
+
 
 
 //employer

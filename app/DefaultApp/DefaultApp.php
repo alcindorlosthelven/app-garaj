@@ -11,6 +11,12 @@ use systeme\Application\Application;
 class DefaultApp extends Application
 {
     //---
+
+    public static function protocolApp()
+    {
+        return strtolower(substr($_SERVER["SERVER_PROTOCOL"], 0, strpos($_SERVER["SERVER_PROTOCOL"], '/'))) . '://';
+    }
+
     public static function formatComptable($p)
     {
         if ($p == "") {

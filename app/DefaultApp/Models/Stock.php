@@ -896,6 +896,22 @@ class Stock extends Model
 
     }
 
+    public function rechercherParNom($nom)
+    {
+
+        $con=self::connection();
+        $req = "select *from stock where nom=:nom";
+        $stmt = $con->prepare($req);
+        $stmt->execute(array(":nom"=>$nom));
+        $res = $stmt->fetchAll(\PDO::FETCH_CLASS, "app\DefaultApp\Models\Stock");
+        if(count($res)>0){
+            return $res[0];
+        }else{
+            return null;
+        }
+    }
+
+
 
     public static function updateCategorie($nouveauCategorie, $ancienCategorie)
     {

@@ -17,6 +17,7 @@
   },
   "require": {
     "phpmailer/phpmailer": "^6.1",
+    "spipu/html2pdf": "^5.1",
     "ext-pdo": "*",
     "ext-curl": "*",
     "ext-json": "*",

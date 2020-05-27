@@ -20,6 +20,8 @@ use systeme\Application\Application as App;
     <link rel="stylesheet"
           href="<?= App::autre("assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css") ?>">
     <!-- iCheck -->
+
+    <link rel="stylesheet" href="<?= App::autre("assets/plugins/toastr/toastr.min.css") ?>">
     <link rel="stylesheet" href="<?= App::autre("assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css") ?>">
     <!-- JQVMap -->
     <link rel="stylesheet" href="<?= App::autre("assets/plugins/jqvmap/jqvmap.min.css") ?>">
@@ -122,6 +124,13 @@ use systeme\Application\Application as App;
 <script src="<?= App::autre("assets/plugins/datatables/jquery.dataTables.js") ?>"></script>
 <script src="<?= App::autre("assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js") ?>"></script>
 
+
+<!-- SweetAlert2 -->
+<!-- Toastr -->
+<script src="<?= App::autre("assets/plugins/toastr/toastr.min.js") ?>"></script>
+<script src="<?= App::autre("assets/plugins/sweetalert2/sweetalert2.min.js") ?>"></script>
+
+
 <!-- AdminLTE App -->
 <script src="<?= App::autre("assets/dist/js/adminlte.js") ?>"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -139,6 +148,7 @@ use systeme\Application\Application as App;
 
     $("document").ready(function () {
         $("form").addClass("was-validated");
+
     });
 
 
@@ -174,6 +184,7 @@ use systeme\Application\Application as App;
     $("#imgInp").change(function () {
         readURL(this);
     });
+
 
 </script>
 <!--modal ajouter categorie autre item-->

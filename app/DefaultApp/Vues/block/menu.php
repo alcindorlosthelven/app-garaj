@@ -170,6 +170,14 @@ use systeme\Application\Application as App;
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="<?= App::genererUrl("vente") ?>" class="nav-link">
+                        <i class="nav-icon fas fa-shopping-cart text-info"></i>
+                        <p>Vente</p>
+                    </a>
+                </li>
+
+
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <!-- <li class="nav-item has-treeview menu-open">

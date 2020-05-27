@@ -27,6 +27,7 @@
                 <table class="table table-bordered datatable">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Id</th>
                         <th>Nom</th>
                         <th>Prenom</th>
@@ -54,6 +55,7 @@
 
                             ?>
                             <tr>
+                                <td><a href="ajouter-vente-<?= $client->getId() ?>"><i class="fa fa-shopping-cart"></i></a></td>
                                 <td><?= $client->getId() ?></td>
                                 <td><?php echo $client->getNom()?></td>
                                 <td><?= $client->getPrenom() ?></td>

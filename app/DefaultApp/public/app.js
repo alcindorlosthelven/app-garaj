@@ -1,6 +1,106 @@
 $("document").ready(function (e) {
     $("#load").hide();
 
+    $(document).on('blur', '.update_quantite', function (e) {
+        e.preventDefault();
+        $("#load").show();
+        let id = $(this).data('id');
+        let value=$(this).text();
+        let id_vente=$(this).data('id_vente');
+        let data = {
+            "id":id,
+            "value":value,
+            "id_vente":id_vente,
+            "update_quantite":""
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'app/DefaultApp/traitements/vente.php',
+            data: data,
+            success: function (datas) {
+                $("#load").hide();
+                let data = $.parseJSON(datas);
+                if (data.statut.trim() == "ok") {
+                    $("#t>tbody:last").empty();
+                    $("#t>tbody:last").append(data.ligne);
+                    $("#tax").html(data.tax);
+                    $("#vtax").html(data.vtax);
+                    $("#sous_total").html(data.sous_total);
+                    $("#total").html(data.total);
+                    toastr.success("Quantite modifier avec success");
+                } else {
+                    let ms = data.value;
+                    toastr.warning(ms);
+                }
+
+            }
+        });
+
+    });
+
+    $(".supprimer").on("click", function (e) {
+        $("#load").show();
+        if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
+            e.preventDefault();
+            let id = $(this).data("id");
+            $.ajax({
+                url: "app/DefaultApp/traitements/vente.php?id="+id+"&finaliser",
+                type: "GET",
+                data: "",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (data) {
+                    $(".message").html(data);
+                    toastr.success("Facture Finaliser Avec success");
+                    setTimeout(function () {
+                        document.location.href="imprimer-facture-vente-"+id+"";
+                    },4000);
+
+                }
+            });
+        } else {
+            toastr.success("Action annuler avec success");
+            e.preventDefault();
+        }
+        $("#load").hide();
+    });
+
+    $(".add_article").on("submit", function (e) {
+
+        e.preventDefault();
+        $("#load").show();
+        $.ajax({
+            type: 'POST',
+            url: 'app/DefaultApp/traitements/vente.php',
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (datas) {
+                //$(".message").html(datas);
+                $("#load").hide();
+                let data = $.parseJSON(datas);
+                if (data.statut == "ok") {
+                    $("#t>tbody:last").append(data.ligne);
+                    $("#date").html(data.date);
+                    $("#invoice").html(data.invoice);
+                    $("#order_id").html(data.order_id);
+                    $("#tax").html(data.tax);
+                    $("#vtax").html(data.vtax);
+                    $("#sous_total").html(data.sous_total);
+                    $("#total").html(data.total);
+                    toastr.success("Ajouter avec success");
+                } else {
+                    let ms = data.value;
+                    toastr.warning(ms);
+                }
+                $("#load").hide();
+            }
+        });
+    });
+
     $(".form-client").on('submit', (function (e) {
         e.preventDefault();
         $("#load").show();
@@ -12,34 +112,17 @@ $("document").ready(function (e) {
             cache: false,
             processData: false,
             success: function (data) {
-                if(data.trim()=="ok"){
+                if (data.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Fait avec success</div>")
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $('.message').html("<div class='alert alert-warning'>"+data+"</div> ");
+                } else {
+                    $('.message').html("<div class='alert alert-warning'>" + data + "</div> ");
                 }
                 $("#load").hide();
             }
         });
     }));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     $(".service_employer").on("change", function () {
         $("#load").show();
@@ -88,11 +171,11 @@ $("document").ready(function (e) {
 
     $(".nom").on("change", function () {
         $("#load").show();
-        var nombre=Math.floor(Math.random() * Math.floor(100));
-        var nom=$(".nom").val();
-        var prenom=$(".prenom").val();
-        prenom=prenom.charAt(0);
-        var identifiant=prenom+nom+nombre;
+        var nombre = Math.floor(Math.random() * Math.floor(100));
+        var nom = $(".nom").val();
+        var prenom = $(".prenom").val();
+        prenom = prenom.charAt(0);
+        var identifiant = prenom + nom + nombre;
         $(".identifiant").val(identifiant);
         $("#load").hide();
 
@@ -100,11 +183,11 @@ $("document").ready(function (e) {
 
     $(".prenom").on("change", function () {
         $("#load").show();
-        var nombre=Math.floor(Math.random() * Math.floor(100));
-        var nom=$(".nom").val();
-        var prenom=$(".prenom").val();
-        prenom=prenom.charAt(0);
-        var identifiant=prenom+nom+nombre;
+        var nombre = Math.floor(Math.random() * Math.floor(100));
+        var nom = $(".nom").val();
+        var prenom = $(".prenom").val();
+        prenom = prenom.charAt(0);
+        var identifiant = prenom + nom + nombre;
         $(".identifiant").val(identifiant);
         $("#load").hide();
     });
@@ -146,16 +229,16 @@ $("document").ready(function (e) {
         });
     });
 
-    $(".categorie").on("change",function () {
-        var categorie=$(".categorie").val();
-        if(categorie==="medecin"){
-            $(".specialite").css("display","inline")
-            $(".specialite1").css("display","none")
+    $(".categorie").on("change", function () {
+        var categorie = $(".categorie").val();
+        if (categorie === "medecin") {
+            $(".specialite").css("display", "inline")
+            $(".specialite1").css("display", "none")
         }
 
-        if(categorie==="autre"){
-            $(".specialite1").css("display","inline")
-            $(".specialite").css("display","none")
+        if (categorie === "autre") {
+            $(".specialite1").css("display", "inline")
+            $(".specialite").css("display", "none")
         }
 
     })
@@ -171,12 +254,12 @@ $("document").ready(function (e) {
             cache: false,
             processData: false,
             success: function (data) {
-                if(data.trim()=="ok"){
+                if (data.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Fait avec success</div>")
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $('.message').html("<div class='alert alert-warning'>"+data+"</div> ");
+                } else {
+                    $('.message').html("<div class='alert alert-warning'>" + data + "</div> ");
                 }
 
                 $("#load").hide();
@@ -207,7 +290,7 @@ $("document").ready(function (e) {
         var id = $(this).data("id");
         var id_pm = $(this).data("id_pm");
         $.ajax({
-            url: "app/DefaultApp/traitements/medecin.php?supprimer_document&id=" + id + "&id_pm=" + id_pm+ "&supe",
+            url: "app/DefaultApp/traitements/medecin.php?supprimer_document&id=" + id + "&id_pm=" + id_pm + "&supe",
             type: "POST",
             data: "",
             contentType: false,
@@ -345,11 +428,11 @@ $("document").ready(function (e) {
             processData: false,
             dataTpe: "json",
             success: function (data) {
-                if(data.trim()=="ok"){
+                if (data.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Fait avec success</div>");
                     alert("fait avec success");
                     location.reload(true);
-                }else{
+                } else {
                     $(".message").html("<div class='alert alert-success'>" + data.trim() + "</div>");
                 }
                 $('#load').hide();
@@ -358,25 +441,25 @@ $("document").ready(function (e) {
         });
     }));
 
-    $(".categorie_ex").on("change",function () {
-        var type=$(".categorie_ex").val();
-        if(type == 'frottis' || type == "culture"){
-            $(".min").prop("readonly",true);
-            $(".maxx").prop("readonly",true);
-        }else{
-            $(".min").prop("readonly",false);
-            $(".maxx").prop("readonly",false);
+    $(".categorie_ex").on("change", function () {
+        var type = $(".categorie_ex").val();
+        if (type == 'frottis' || type == "culture") {
+            $(".min").prop("readonly", true);
+            $(".maxx").prop("readonly", true);
+        } else {
+            $(".min").prop("readonly", false);
+            $(".maxx").prop("readonly", false);
         }
     });
 
-    $(".type_ex").on("change",function () {
-        var type=$(".type_ex").val();
-        if(type != 'min_max'){
-            $(".min").prop("readonly",true);
-            $(".maxx").prop("readonly",true);
-        }else{
-            $(".min").prop("readonly",false);
-            $(".maxx").prop("readonly",false);
+    $(".type_ex").on("change", function () {
+        var type = $(".type_ex").val();
+        if (type != 'min_max') {
+            $(".min").prop("readonly", true);
+            $(".maxx").prop("readonly", true);
+        } else {
+            $(".min").prop("readonly", false);
+            $(".maxx").prop("readonly", false);
         }
     });
 
@@ -384,7 +467,7 @@ $("document").ready(function (e) {
     $(".formulaire_modifier_groupe_examen").on('submit', (function (e) {
         $('#ajax-loading').show();
         e.preventDefault();
-        var idex=$(".id_groupe").val();
+        var idex = $(".id_groupe").val();
         $.ajax({
             url: "app/DefaultApp/traitements/laboratoire.php",
             type: "POST",
@@ -396,7 +479,7 @@ $("document").ready(function (e) {
                 if (data.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Modifier avec success...</div>");
                     alert("Modifier avec success...");
-                    document.location.href = 'modfier-groupe-exament-laboratoire-'+idex+'';
+                    document.location.href = 'modfier-groupe-exament-laboratoire-' + idex + '';
                 } else {
                     $(".message").html("<div class='alert alert-warning'>" + data + "</div>");
                 }
@@ -463,11 +546,11 @@ $("document").ready(function (e) {
             cache: false,
             processData: false,
             success: function (data) {
-                if(data.trim()=="ok"){
+                if (data.trim() == "ok") {
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $(".message").html("<div class='alert alert-warning'>"+data+"</div>")
+                } else {
+                    $(".message").html("<div class='alert alert-warning'>" + data + "</div>")
                 }
                 $("#load").hide();
             }
@@ -1885,10 +1968,10 @@ $("document").ready(function (e) {
 
     $('.location_inventaire').change(function () {
         $('#load').show();
-        var location=$(".location_inventaire").val();
+        var location = $(".location_inventaire").val();
         $.ajax({
             type: 'GET',
-            url: 'app/DefaultApp/traitements/liste_stock.php?location='+location+'',
+            url: 'app/DefaultApp/traitements/liste_stock.php?location=' + location + '',
             data: "",
             success: function (datas) {
                 $(".tlst:last").empty();
@@ -1899,7 +1982,7 @@ $("document").ready(function (e) {
 
     });
 
-    $(".ajuster_quantite").on("submit",function (e) {
+    $(".ajuster_quantite").on("submit", function (e) {
         e.preventDefault();
         $("#load").show();
         $.ajax({
@@ -1910,19 +1993,19 @@ $("document").ready(function (e) {
             cache: false,
             processData: false,
             success: function (datas) {
-                if(datas.trim()=="ok"){
+                if (datas.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Fait Avec success</div>")
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $(".message").html("<div class='alert alert-warning'>"+datas+"</div>")
+                } else {
+                    $(".message").html("<div class='alert alert-warning'>" + datas + "</div>")
                 }
                 $("#load").hide();
             }
         });
     });
 
-    $(".forme_inventory").on("submit",function (e) {
+    $(".forme_inventory").on("submit", function (e) {
         e.preventDefault();
         $("#load").show();
         $.ajax({
@@ -1933,12 +2016,12 @@ $("document").ready(function (e) {
             cache: false,
             processData: false,
             success: function (datas) {
-                if(datas.trim()=="ok"){
+                if (datas.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Fait Avec success</div>")
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $(".message").html("<div class='alert alert-warning'>"+datas+"</div>")
+                } else {
+                    $(".message").html("<div class='alert alert-warning'>" + datas + "</div>")
                 }
                 $("#load").hide();
             }
@@ -2049,10 +2132,10 @@ $("document").ready(function (e) {
     $(".type_chambre").on("change", function () {
         $("#load").show();
         var type = $(".type_chambre").val();
-        var service=$(".id_service").val();
+        var service = $(".id_service").val();
         var data = {
             "type": type,
-            "service":service
+            "service": service
         };
         $.ajax({
             type: 'POST',
@@ -2069,22 +2152,22 @@ $("document").ready(function (e) {
 
     $(".type_admision").on("change", function () {
         $("#load").show();
-            var val =$(".type_admision").val();
-            if(val=="admision"){
-                $(".divpre").css("display","none");
-            }else{
-                $(".divpre").css("display","inline");
-            }
+        var val = $(".type_admision").val();
+        if (val == "admision") {
+            $(".divpre").css("display", "none");
+        } else {
+            $(".divpre").css("display", "inline");
+        }
         $("#load").hide();
     });
 
     $(".admis_pour").on("change", function () {
         $("#load").show();
-        var val =$(".admis_pour").val();
-        if(val=="hospitalisation"){
-            $(".divch").css("display","none");
-        }else{
-            $(".divch").css("display","inline");
+        var val = $(".admis_pour").val();
+        if (val == "hospitalisation") {
+            $(".divch").css("display", "none");
+        } else {
+            $(".divch").css("display", "inline");
         }
         $("#load").hide();
     });
@@ -2103,8 +2186,8 @@ $("document").ready(function (e) {
                 if (data.trim() == "ok") {
                     alert("enregistrer avec success");
                     history.back();
-                }else{
-                    $(".message").html("<div class='alert alert-warning'>"+data+"</div>");
+                } else {
+                    $(".message").html("<div class='alert alert-warning'>" + data + "</div>");
                 }
                 $("#load").hide();
             }
@@ -2125,8 +2208,8 @@ $("document").ready(function (e) {
                 if (data.trim() == "ok") {
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $(".message").html("<div class='alert alert-warning'>"+data+"</div>");
+                } else {
+                    $(".message").html("<div class='alert alert-warning'>" + data + "</div>");
                 }
                 $("#load").hide();
             }
@@ -2147,8 +2230,8 @@ $("document").ready(function (e) {
                 if (data.trim() == "ok") {
                     alert("fait avec success");
                     location.reload(true);
-                }else{
-                    $(".message").html("<div class='alert alert-warning'>"+data+"</div>");
+                } else {
+                    $(".message").html("<div class='alert alert-warning'>" + data + "</div>");
                 }
                 $("#load").hide();
             }
@@ -2256,63 +2339,63 @@ $("document").ready(function (e) {
     //consultation
     $(".type_consultation").on("click", function (e) {
         if ($(this).prop('checked') == true) {
-            var valeur=$(this).val();
-            if(valeur=="post_natal"){
-                $(".div_postnatal").css("display","block");
-                $(".div_pediatrie").css("display","none");
-                $(".div_premiere_adulte").css("display","none");
-                $(".div_adulte").css("display","none");
-                $(".div_premiere_obgyn").css("display","none");
-                $(".div_obgyn").css("display","none");
-                $(".div_urgence").css("display","none");
-            }else if(valeur=="pediatrie"){
-                $(".div_postnatal").css("display","none");
-                $(".div_pediatrie").css("display","block");
-                $(".div_premiere_adulte").css("display","none");
-                $(".div_adulte").css("display","none");
-                $(".div_premiere_obgyn").css("display","none");
-                $(".div_obgyn").css("display","none");
-                $(".div_urgence").css("display","none");
-            }else if(valeur=="premiere_adulte"){
-                $(".div_postnatal").css("display","none");
-                $(".div_pediatrie").css("display","none");
-                $(".div_premiere_adulte").css("display","block");
-                $(".div_adulte").css("display","none");
-                $(".div_premiere_obgyn").css("display","none");
-                $(".div_obgyn").css("display","none");
-                $(".div_urgence").css("display","none");
-            }else if(valeur=="adulte"){
-                $(".div_postnatal").css("display","none");
-                $(".div_pediatrie").css("display","none");
-                $(".div_premiere_adulte").css("display","none");
-                $(".div_adulte").css("display","block");
-                $(".div_premiere_obgyn").css("display","none");
-                $(".div_obgyn").css("display","none");
-                $(".div_urgence").css("display","none");
-            }else if(valeur=="premiere_obgyn"){
-                $(".div_postnatal").css("display","none");
-                $(".div_pediatrie").css("display","none");
-                $(".div_premiere_adulte").css("display","none");
-                $(".div_adulte").css("display","none");
-                $(".div_premiere_obgyn").css("display","block");
-                $(".div_obgyn").css("display","none");
-                $(".div_urgence").css("display","none");
-            }else if(valeur=="obgyn"){
-                $(".div_postnatal").css("display","none");
-                $(".div_pediatrie").css("display","none");
-                $(".div_premiere_adulte").css("display","none");
-                $(".div_adulte").css("display","none");
-                $(".div_premiere_obgyn").css("display","none");
-                $(".div_obgyn").css("display","block");
-                $(".div_urgence").css("display","none");
-            }else if(valeur=="urgence"){
-                $(".div_postnatal").css("display","none");
-                $(".div_pediatrie").css("display","none");
-                $(".div_premiere_adulte").css("display","none");
-                $(".div_adulte").css("display","none");
-                $(".div_premiere_obgyn").css("display","none");
-                $(".div_obgyn").css("display","none");
-                $(".div_urgence").css("display","block");
+            var valeur = $(this).val();
+            if (valeur == "post_natal") {
+                $(".div_postnatal").css("display", "block");
+                $(".div_pediatrie").css("display", "none");
+                $(".div_premiere_adulte").css("display", "none");
+                $(".div_adulte").css("display", "none");
+                $(".div_premiere_obgyn").css("display", "none");
+                $(".div_obgyn").css("display", "none");
+                $(".div_urgence").css("display", "none");
+            } else if (valeur == "pediatrie") {
+                $(".div_postnatal").css("display", "none");
+                $(".div_pediatrie").css("display", "block");
+                $(".div_premiere_adulte").css("display", "none");
+                $(".div_adulte").css("display", "none");
+                $(".div_premiere_obgyn").css("display", "none");
+                $(".div_obgyn").css("display", "none");
+                $(".div_urgence").css("display", "none");
+            } else if (valeur == "premiere_adulte") {
+                $(".div_postnatal").css("display", "none");
+                $(".div_pediatrie").css("display", "none");
+                $(".div_premiere_adulte").css("display", "block");
+                $(".div_adulte").css("display", "none");
+                $(".div_premiere_obgyn").css("display", "none");
+                $(".div_obgyn").css("display", "none");
+                $(".div_urgence").css("display", "none");
+            } else if (valeur == "adulte") {
+                $(".div_postnatal").css("display", "none");
+                $(".div_pediatrie").css("display", "none");
+                $(".div_premiere_adulte").css("display", "none");
+                $(".div_adulte").css("display", "block");
+                $(".div_premiere_obgyn").css("display", "none");
+                $(".div_obgyn").css("display", "none");
+                $(".div_urgence").css("display", "none");
+            } else if (valeur == "premiere_obgyn") {
+                $(".div_postnatal").css("display", "none");
+                $(".div_pediatrie").css("display", "none");
+                $(".div_premiere_adulte").css("display", "none");
+                $(".div_adulte").css("display", "none");
+                $(".div_premiere_obgyn").css("display", "block");
+                $(".div_obgyn").css("display", "none");
+                $(".div_urgence").css("display", "none");
+            } else if (valeur == "obgyn") {
+                $(".div_postnatal").css("display", "none");
+                $(".div_pediatrie").css("display", "none");
+                $(".div_premiere_adulte").css("display", "none");
+                $(".div_adulte").css("display", "none");
+                $(".div_premiere_obgyn").css("display", "none");
+                $(".div_obgyn").css("display", "block");
+                $(".div_urgence").css("display", "none");
+            } else if (valeur == "urgence") {
+                $(".div_postnatal").css("display", "none");
+                $(".div_pediatrie").css("display", "none");
+                $(".div_premiere_adulte").css("display", "none");
+                $(".div_adulte").css("display", "none");
+                $(".div_premiere_obgyn").css("display", "none");
+                $(".div_obgyn").css("display", "none");
+                $(".div_urgence").css("display", "block");
             }
         }
     });
@@ -2331,7 +2414,7 @@ $("document").ready(function (e) {
                 if (data.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Consultation Ajouter Avec succes</div>");
                     alert("consultation ajouter avec success");
-                    document.location.href='lister-patient';
+                    document.location.href = 'lister-patient';
                 } else {
                     $(".message").html("<div class='alert alert-warning'>" + data + "</div>");
                 }
@@ -2354,7 +2437,7 @@ $("document").ready(function (e) {
                 if (data.trim() == "ok") {
                     $(".message").html("<div class='alert alert-success'>Consultation Ajouter Avec succes</div>");
                     alert("consultation ajouter avec success");
-                    document.location.href='lister-patient';
+                    document.location.href = 'lister-patient';
                 } else {
                     $(".message").html("<div class='alert alert-warning'>" + data + "</div>");
                 }
@@ -2364,23 +2447,6 @@ $("document").ready(function (e) {
     }));
 
     //fin consultation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 });

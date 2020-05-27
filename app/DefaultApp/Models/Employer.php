@@ -424,8 +424,6 @@ class Employer extends Model
     }
 
 
-
-
     private function employerExiste($nom, $prenom, $cin, $nif)
     {
         $con=self::connection();

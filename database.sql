@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.client: ~1 rows (approximately)
+-- Dumping data for table app-garaj.client: ~2 rows (approximately)
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
 INSERT INTO `client` (`id`, `nom`, `prenom`, `telephone`, `email`, `photo`, `date_naissance`, `cin`, `nif`, `actif`, `pseudo`, `password`, `adresse`) VALUES
 	(6, 'alcindor', 'losthelven', '(+509)3739-15-67', 'alcindorlos@gmail.com', 'app/DefaultApp/public/fichier/photo_alcindorlosthelven.png', '14/11/1993', '54-65-46-5465-46-54654', '646-546-546-5', 'non', 'lalcindor54', '63982e54a7aeb0d89910475ba6dbd3ca6dd4e5a1', '10 fontamara 29'),
@@ -232,14 +232,16 @@ CREATE TABLE IF NOT EXISTS `item_vente` (
   KEY `FK_item_vente_stock` (`id_produit`),
   CONSTRAINT `FK_item_vente_stock` FOREIGN KEY (`id_produit`) REFERENCES `stock` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_item_vente_vente` FOREIGN KEY (`id_vente`) REFERENCES `vente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.item_vente: ~0 rows (approximately)
+-- Dumping data for table app-garaj.item_vente: ~5 rows (approximately)
 /*!40000 ALTER TABLE `item_vente` DISABLE KEYS */;
 INSERT INTO `item_vente` (`id`, `id_vente`, `id_produit`, `prix`, `quantite`) VALUES
 	(57, 26, 7, '70000', 1),
 	(58, 27, 6, '50000', 10),
-	(59, 27, 7, '70000', 2);
+	(59, 27, 7, '70000', 2),
+	(60, 28, 7, '70000', 1),
+	(61, 28, 6, '50000', 2);
 /*!40000 ALTER TABLE `item_vente` ENABLE KEYS */;
 
 -- Dumping structure for table app-garaj.personne_prevenir_employer
@@ -380,13 +382,14 @@ CREATE TABLE IF NOT EXISTS `vente` (
   PRIMARY KEY (`id`),
   KEY `FK_vente_client` (`id_client`),
   CONSTRAINT `FK_vente_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.vente: ~0 rows (approximately)
+-- Dumping data for table app-garaj.vente: ~3 rows (approximately)
 /*!40000 ALTER TABLE `vente` DISABLE KEYS */;
 INSERT INTO `vente` (`id`, `id_client`, `numero`, `date`, `date_paiement`, `payer`, `taxe`, `deduction`) VALUES
 	(26, 6, '86524210979', '2020-05-26', '2020-05-26', 'oui', '5.6', '0'),
-	(27, 7, '53581827823', '2020-05-26', 'n/a', 'non', '5.6', '0');
+	(27, 7, '53581827823', '2020-05-26', 'n/a', 'non', '5.6', '0'),
+	(28, 6, '35258761904', '2020-05-27', 'n/a', 'non', '5.6', '0');
 /*!40000 ALTER TABLE `vente` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

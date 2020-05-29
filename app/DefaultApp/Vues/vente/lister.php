@@ -55,7 +55,7 @@
                                 if($p->getPayer()=="oui"){
                                     $lien="facture-vente-{$p->getId()}";
                                 }else{
-                                    $lien="ajouter-vente-{$client->getId()}";
+                                    $lien="ajouter-vente-{$p->getId()}";
                                 }
                                 ?>
                                 <tr>

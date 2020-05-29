@@ -1,4 +1,3 @@
-
 <div class="row">
     <div class="col-md-12">
         <div class="no-print">
@@ -7,43 +6,48 @@
         <?php if (!isset($client)) {
             return;
         }
-
         $ligne = "";
-        $dernierVente = \app\DefaultApp\Models\Vente::rechercherParClientNonPayer($client->getId(), date("Y-m-d"));
         $vtax = 0;
-        $tax=0;
+        $tax = 0;
         $soutotal1 = 0;
         $total = 0;
-        if ($dernierVente != null) {
-            $tax = $dernierVente->getTaxe();
-            if(isset($_GET['sup']))
-            {
-                $id=$_GET['sup'];
-                $itemVente=new \app\DefaultApp\Models\ItemVente();
-                $itemVente->deleteById($id);
-                \app\DefaultApp\DefaultApp::redirection("ajouter_vente",["id"=>$client->getId()]);
-            }
+        if (isset($dernierVente)) {
+            if ($dernierVente != null) {
+                $tax = $dernierVente->getTaxe();
+                if (isset($_GET['sup'])) {
+                    $id = $_GET['sup'];
+                    $itemVente = new \app\DefaultApp\Models\ItemVente();
+                    $itemVente->deleteById($id);
+                    \app\DefaultApp\DefaultApp::redirection("ajouter_vente", ["id" => $dernierVente->getId()]);
+                }
 
-            $itemVente = \app\DefaultApp\Models\ItemVente::listerParVente($dernierVente->getId());
-            $stock = new \app\DefaultApp\Models\Stock();
-            if (count($itemVente) > 0) {
-                foreach ($itemVente as $itv) {
-                    $quantite = $itv->getQuantite();
-                    $prix = $itv->getPrix();
-                    $soutotal = $quantite * $prix;
-                    $stock = $stock->findById($itv->getIdProduit());
+                $itemVente = \app\DefaultApp\Models\ItemVente::listerParVente($dernierVente->getId());
+                $stock = new \app\DefaultApp\Models\Stock();
+                if (count($itemVente) > 0) {
+                    foreach ($itemVente as $itv) {
+                        $quantite = $itv->getQuantite();
+                        $prix = $itv->getPrix();
+                        $soutotal = $quantite * $prix;
+                        $stock = $stock->findById($itv->getIdProduit());
+                        if($dernierVente->getPayer()=="non")
+                        {
+                            $trash="<a href='?sup={$itv->getId()}'><i class='fa fa-trash'></i></a>";
+                        }else{
+                            $trash="";
+                        }
 
-                    $prix = \app\DefaultApp\DefaultApp::formatComptable($prix);
-                    $soutotal = \app\DefaultApp\DefaultApp::formatComptable($soutotal);
-                    $ligne .= "<tr><td><a href='?sup={$itv->getId()}'><i class='fa fa-trash'></i></a> {$stock->getNom()}</td><td>{$stock->getDescription()}</td><td class='update_quantite' data-id='{$itv->getId()}' data-id_vente='{$dernierVente->getId()}' contenteditable='true'>{$quantite}</td><td>{$prix}</td><td>{$soutotal}</td></tr>";
-                    $soutotal1 = \app\DefaultApp\Models\ItemVente::sousTotal($dernierVente->getId());
-                    $vtax = ($soutotal1 * $tax) / 100;
-                    $total = $soutotal1 + $vtax;
+                        $prix = \app\DefaultApp\DefaultApp::formatComptable($prix);
+                        $soutotal = \app\DefaultApp\DefaultApp::formatComptable($soutotal);
+                        $ligne .= "<tr><td>{$trash} {$stock->getNom()}</td><td>{$stock->getDescription()}</td><td class='update_quantite' data-id='{$itv->getId()}' data-id_vente='{$dernierVente->getId()}' contenteditable='true'>{$quantite}</td><td>{$prix}</td><td>{$soutotal}</td></tr>";
+                        $soutotal1 = \app\DefaultApp\Models\ItemVente::sousTotal($dernierVente->getId());
+                        $vtax = ($soutotal1 * $tax) / 100;
+                        $total = $soutotal1 + $vtax;
 
-                    $soutotal1 = \app\DefaultApp\DefaultApp::formatComptable($soutotal1);
-                    $vtax = \app\DefaultApp\DefaultApp::formatComptable($vtax);
-                    $total = \app\DefaultApp\DefaultApp::formatComptable($total);
+                        $soutotal1 = \app\DefaultApp\DefaultApp::formatComptable($soutotal1);
+                        $vtax = \app\DefaultApp\DefaultApp::formatComptable($vtax);
+                        $total = \app\DefaultApp\DefaultApp::formatComptable($total);
 
+                    }
                 }
             }
         }
@@ -52,33 +56,48 @@
             <div class="card-header"><h4>Ajouter Vente</h4></div>
             <div class="card-body">
                 <div class="message"></div>
-                <form method="post" class="was-validated no-print add_article">
-                    <?php
-                    if ($dernierVente != null) {
+                <?php
+                if (isset($dernierVente)) {
+                    if ($dernierVente->getPayer() == "non") {
                         ?>
-                        <input type="hidden" name="id_vente" value="<?= $dernierVente->getId(); ?>">
+
                         <?php
                     }
+                }else{
                     ?>
-                    <div class="row">
-                        <div class="form-group col-4">
-                            <label>Article</label>
-                            <input type="text" class="form-control auto_item" name="article" required>
-                        </div>
+                    <form method="post" class="was-validated no-print add_article">
+                        <?php
+                        if (isset($dernierVente)) {
+                            if ($dernierVente != null) {
+                                ?>
+                                <input type="hidden" name="id_vente" value="<?= $dernierVente->getId(); ?>">
+                                <?php
+                            }
+                        }
+                        ?>
+                        <div class="row">
+                            <div class="form-group col-4">
+                                <label>Article</label>
+                                <input type="text" class="form-control auto_item" name="article" required>
+                            </div>
 
-                        <div class="form-group col-4">
-                            <label>Quantité</label>
-                            <input min="1" type="number" class="form-control" value="1" name="quantite">
-                        </div>
+                            <div class="form-group col-4">
+                                <label>Quantité</label>
+                                <input min="1" type="number" class="form-control" value="1" name="quantite">
+                            </div>
 
-                        <div class="form-group col-4">
-                            <input type="hidden" name="ajouter_article">
-                            <input type="hidden" name="id_client" value="<?= $client->getId() ?>">
-                            <label>.</label><br>
-                            <input type="submit" class="btn btn-success" value="ajouter">
+                            <div class="form-group col-4">
+                                <input type="hidden" name="ajouter_article">
+                                <input type="hidden" name="id_client" value="<?= $client->getId() ?>">
+                                <label>.</label><br>
+                                <input type="submit" class="btn btn-success" value="ajouter">
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                <?php
+                }
+                ?>
+
                 <?php ob_start(); ?>
                 <page>
                     <form method="post" class="form-vente">
@@ -88,7 +107,11 @@
                                     <h4>
                                         <i class="fas fa-globe"></i> APP-GARAJ
                                         <small class="float-right">Date: <span
-                                                    id="date"><?php if ($dernierVente != null) echo $dernierVente->getDate() ?></span></small>
+                                                    id="date"><?php if (isset($dernierVente)) {
+                                                    if ($dernierVente != null) {
+                                                        echo $dernierVente->getDate();
+                                                    }
+                                                } ?></span></small>
                                     </h4>
                                 </div>
 
@@ -118,10 +141,18 @@
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
                                     <b>Invoice <span
-                                                id="invoice"><?php if ($dernierVente != null) echo $dernierVente->getNumero() ?></span></b><br>
+                                                id="invoice"><?php if (isset($dernierVente)) {
+                                                if ($dernierVente != null) {
+                                                    echo $dernierVente->getNumero();
+                                                }
+                                            } ?></span></b><br>
                                     <br>
                                     <b>Order ID: <span
-                                                id="order_id"><?php if ($dernierVente != null) echo $dernierVente->getId() ?></span></b>
+                                                id="order_id"><?php if (isset($dernierVente)) {
+                                                if ($dernierVente != null) {
+                                                    echo $dernierVente->getId();
+                                                }
+                                            } ?></span></b>
                                     <br>
                                 </div>
                                 <!-- /.col -->
@@ -200,22 +231,34 @@
                     <div class="col-12">
                         <?php
                         if (isset($dernierVente)) {
-                           /* $pdf = new \Spipu\Html2Pdf\Html2Pdf("P", "A4", "en");
-                            $lien = \app\DefaultApp\DefaultApp::protocolApp() . $_SERVER['HTTP_HOST'];
-                            \Spipu\Html2Pdf\Html2Pdf::$lien_web = $lien;
-                            $pdf->writeHTML($data);
+                            /* $pdf = new \Spipu\Html2Pdf\Html2Pdf("P", "A4", "en");
+                             $lien = \app\DefaultApp\DefaultApp::protocolApp() . $_SERVER['HTTP_HOST'];
+                             \Spipu\Html2Pdf\Html2Pdf::$lien_web = $lien;
+                             $pdf->writeHTML($data);
 
-                            $nom = "invoice_".$dernierVente->getId();
-                            $destination = str_replace("\\", "/", dirname(__DIR__)) . "/public/fichier/" . $nom . ".pdf";
-                            //$pdf->output($destination, 'F');
-                            $pdf->output("bultin.pdf");*/
+                             $nom = "invoice_".$dernierVente->getId();
+                             $destination = str_replace("\\", "/", dirname(__DIR__)) . "/public/fichier/" . $nom . ".pdf";
+                             //$pdf->output($destination, 'F');
+                             $pdf->output("bultin.pdf");*/
                             ?>
                             <a href="imprimer-facture-vente-<?php if ($dernierVente != null) echo $dernierVente->getId() ?>"
                                target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Imprimer</a>
 
-                            <a href="" type="button" class="supprimer btn btn-success float-right" data-id="<?= $dernierVente->getId(); ?>"><i class="far fa-credit-card"></i>Finaliser Paiement</a>
+                            <?php
+                            if (isset($dernierVente)) {
+                                if ($dernierVente->getPayer() == "non") {
+                                    ?>
+                                    <a href="" type="button" class="supprimer btn btn-success float-right"
+                                       data-id="<?= $dernierVente->getId(); ?>"><i class="far fa-credit-card"></i>Finaliser
+                                        Paiement</a>
+                                    <?php
+                                }
+                            }
+                            ?>
 
-                            <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"><i class="fas fa-download"></i> Generer en PDF</button>
+                            <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"><i
+                                        class="fas fa-download"></i> Generer en PDF
+                            </button>
                             <?php
                         } else {
                             ?>

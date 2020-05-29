@@ -16,6 +16,21 @@ class VenteControlleur extends BaseControlleur
         $client=$client->findById($id);
         if($client!=null){
             $var['client']=$client;
+            $dernierVente = \app\DefaultApp\Models\Vente::rechercherParClientNonPayer($client->getId(), date("Y-m-d"));
+            if($dernierVente!=null){
+                $var['dernierVente']=$dernierVente;
+            }
+        }else{
+            $vente=new Vente();
+            $vente=$vente->findById($id);
+            if($vente!=null){
+                $client=new Client();
+                $client=$client->findById($vente->getIdClient());
+                if($client!=null){
+                    $var['client']=$client;
+                    $var['dernierVente']=$vente;
+                }
+            }
         }
         $this->render("vente/ajouter",$var);
     }

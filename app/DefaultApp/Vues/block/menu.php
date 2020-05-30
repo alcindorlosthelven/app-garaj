@@ -148,6 +148,12 @@ use systeme\Application\Application as App;
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+                <li class="nav-item">
+                    <a href="<?= App::genererUrl("fournisseur") ?>" class="nav-link">
+                        <i class="nav-icon fas fa-user-friends text-info"></i>
+                        <p>Fournisseurs</p>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="<?= App::genererUrl("employer") ?>" class="nav-link">
@@ -159,7 +165,7 @@ use systeme\Application\Application as App;
                 <li class="nav-item">
                     <a href="<?= App::genererUrl("client") ?>" class="nav-link">
                         <i class="nav-icon fa fa-user text-info"></i>
-                        <p>Client</p>
+                        <p>Clients</p>
                     </a>
                 </li>
 
@@ -173,10 +179,16 @@ use systeme\Application\Application as App;
                 <li class="nav-item">
                     <a href="<?= App::genererUrl("vente") ?>" class="nav-link">
                         <i class="nav-icon fas fa-shopping-cart text-info"></i>
-                        <p>Vente</p>
+                        <p>Ventes</p>
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="<?= App::genererUrl("achat") ?>" class="nav-link">
+                        <i class="nav-icon fa fa-shopping-bag text-info"></i>
+                        <p>Achats</p>
+                    </a>
+                </li>
 
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->

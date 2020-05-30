@@ -208,7 +208,7 @@ class RepartitionStock extends Model
                 $ets = new EntrerSortie();
                 $ets->setItem($item);
                 $ets->setNoTransaction("A-" . rand(10, 1000000));
-                $ets->setTypeTransaction("Augementation Stock");
+                $ets->setTypeTransaction("Augementation Stock : $raison");
                 $ets->setDate(date("Y-m-d h:i:s"));
                 $ets->setLocation($service);
                 $ets->setQuantite($qt);

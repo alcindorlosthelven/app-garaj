@@ -21,6 +21,13 @@ App::get("/imprimer-facture-vente-:id", "print.imprimer")->avec("id",'[0-9]+');
 App::get("/facture-vente-:id", "vente.factureVente","facture_vente")->avec("id",'[0-9]+');
 //fin vente
 
+//achat
+App::get("/achat", "achat.lister", "achat");
+App::get("/ajouter-achat-:id", "achat.ajouter", "ajouter_achat")->avec("id",'[0-9]+');
+App::get("/lister-achat", "achat.lister", "lister_achat");
+App::get("/facture-achat-:id", "achat.factureAchat","facture_achat")->avec("id",'[0-9]+');
+App::get("/imprimer-facture-achat-:id", "print.imprimerAchat")->avec("id",'[0-9]+');
+//fin achat
 
 
 //employer

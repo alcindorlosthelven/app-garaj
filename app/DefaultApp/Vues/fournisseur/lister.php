@@ -8,6 +8,7 @@
                 <table class="table table-bordered datatable">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>Nom</th>
                         <th>Adresse</th>
                         <th>Téléphone</th>
@@ -23,6 +24,7 @@
                         foreach ($listeFournisseur as $fournisseur) {
                             ?>
                             <tr>
+                                <td><a href="ajouter-achat-<?= $fournisseur->getId() ?>"><i class="fa fa-shopping-cart"></i></a></td>
                                 <td><?= $fournisseur->getNom() ?></td>
                                 <td><?= $fournisseur->getAdresse() ?></td>
                                 <td><?= $fournisseur->getTelephone() ?></td>

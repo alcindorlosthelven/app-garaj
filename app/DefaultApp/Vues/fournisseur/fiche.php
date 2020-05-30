@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-header"><h4>
                     <?php
-                    if(isset($fournisseur)){
+                    if (isset($fournisseur)) {
                         echo strtoupper($fournisseur->getNom());
                     }
                     ?>
@@ -13,11 +13,13 @@
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Information Générale</a>
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">Information Générale</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#comptable" role="tab" aria-controls="contact" aria-selected="false">Comptabilité</a>
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#comptable" role="tab"
+                           aria-controls="contact" aria-selected="false">Achat</a>
                     </li>
                 </ul>
 
@@ -29,19 +31,23 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Nom</label>
-                                    <input readonly value="<?php if (isset($fournisseur)) echo $fournisseur->getNom(); ?>" type="text"
+                                    <input readonly
+                                           value="<?php if (isset($fournisseur)) echo $fournisseur->getNom(); ?>"
+                                           type="text"
                                            name="nom" class="form-control" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Adresse</label>
-                                    <input readonly value="<?php if (isset($fournisseur)) echo $fournisseur->getAdresse(); ?>"
+                                    <input readonly
+                                           value="<?php if (isset($fournisseur)) echo $fournisseur->getAdresse(); ?>"
                                            type="text" name="adresse" class="form-control" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Téléphone</label>
-                                    <input readonly value="<?php if (isset($fournisseur)) echo $fournisseur->getTelephone(); ?>"
+                                    <input readonly
+                                           value="<?php if (isset($fournisseur)) echo $fournisseur->getTelephone(); ?>"
                                            type="text" name="telephone" class="form-control" required>
                                 </div>
 
@@ -50,13 +56,17 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input readonly value="<?php if (isset($fournisseur)) echo $fournisseur->getEmail(); ?>" type="email"
+                                    <input readonly
+                                           value="<?php if (isset($fournisseur)) echo $fournisseur->getEmail(); ?>"
+                                           type="email"
                                            name="email" class="form-control" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Statut</label>
-                                    <input readonly value="<?php if (isset($fournisseur)) echo $fournisseur->getStatut(); ?>" class="form-control" required>
+                                    <input readonly
+                                           value="<?php if (isset($fournisseur)) echo $fournisseur->getStatut(); ?>"
+                                           class="form-control" required>
                                 </div>
 
 
@@ -66,32 +76,36 @@
                                 <h4>Personne de contact</h4>
                                 <div class="row">
                                     <?php
-                                    if(isset($contactA)) {
+                                    if (isset($contactA)) {
                                         if (count($contactA) > 0) {
                                             foreach ($contactA as $c) {
                                                 ?>
                                                 <div class="form-group col-md-3">
                                                     <label>Nom</label>
-                                                    <input readonly value="<?= $c->getNom(); ?>" type="text" name="nomp[]"
+                                                    <input readonly value="<?= $c->getNom(); ?>" type="text"
+                                                           name="nomp[]"
                                                            placeholder="Nom"
                                                            class="form-control">
                                                 </div>
 
                                                 <div class="form-group col-md-3">
                                                     <label>Poste</label>
-                                                    <input readonly value="<?= $c->getPoste() ?>" type="text" name="postep[]"
+                                                    <input readonly value="<?= $c->getPoste() ?>" type="text"
+                                                           name="postep[]"
                                                            placeholder="Poste" class="form-control">
                                                 </div>
 
                                                 <div class="form-group col-md-3">
                                                     <label>Téléphone</label>
-                                                    <input readonly value="<?= $c->getTelephone(); ?>" type="text" name="telephonep[]"
+                                                    <input readonly value="<?= $c->getTelephone(); ?>" type="text"
+                                                           name="telephonep[]"
                                                            placeholder="Telephone" class="form-control">
                                                 </div>
 
                                                 <div class="form-group col-md-3">
                                                     <label>Email</label>
-                                                    <input readonly value="<?= $c->getEmail(); ?>" type="text" name="emailp[]"
+                                                    <input readonly value="<?= $c->getEmail(); ?>" type="text"
+                                                           name="emailp[]"
                                                            placeholder="Email" class="form-control">
                                                 </div>
                                                 <?php
@@ -108,7 +122,41 @@
 
                     </div>
 
-                    <div class="tab-pane fade" id="comptable" role="tabpanel" aria-labelledby="contact-tab"><h2>Comptabilite</h2></div>
+                    <div class="tab-pane fade" id="comptable" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="table-responsive">
+                            <table class="table table-bordered datatable">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                </tr>
+                                </thead>
+
+                                <?php
+                                $listeAchat=\app\DefaultApp\Models\Achat::all($fournisseur->getId());
+                                if (isset($listeAchat)) {
+                                    $fournisseur = new \app\DefaultApp\Models\Fournisseur();
+                                    foreach ($listeAchat as $p) {
+                                        $fournisseur = $fournisseur->findById($p->getIdFournisseur());
+                                        if ($p->getStatut() == "finaliser") {
+                                            $lien = "facture-achat-{$p->getId()}";
+                                        } else {
+                                            $lien = "ajouter-achat-{$p->getId()}";
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td><a href="<?= $lien ?>"><?= $p->getId() ?></a></td>
+                                            <td><?= $p->getDate() ?></td>
+                                            <td><?= $p->getStatut(); ?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
 

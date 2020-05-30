@@ -1,7 +1,7 @@
 <?php
 require "../../../vendor/autoload.php";
 if(isset($_POST['ajouter_article'])){
-
+    $stock=new \app\DefaultApp\Models\Stock();
     $taxe=floatval(\app\DefaultApp\Models\Configuration::getValueOfConfiguraton("taxe"));
     if(empty($taxe)){
         $taxe="0";
@@ -11,7 +11,6 @@ if(isset($_POST['ajouter_article'])){
     $id_client=$_POST['id_client'];
     $nomA=trim(addslashes($_POST['article']));
     $quantite=intval($_POST['quantite']);
-    $stock=new \app\DefaultApp\Models\Stock();
     $stock=$stock->rechercherParNom($nomA);
     if($stock==null){
         $rps['statut']="no";
@@ -90,7 +89,6 @@ if(isset($_POST['ajouter_article'])){
 
 if(isset($_GET['finaliser'])){
     $id=$_GET['id'];
-    echo $id;
     $vente=new \app\DefaultApp\Models\Vente();
     $vente=$vente->findById($id);
     $vente->setPayer("oui");
@@ -153,4 +151,98 @@ if(isset($_POST['update_quantite'])){
         }
     }
 
+}
+
+if(isset($_POST['ajouter_article_achat'])){
+
+    $rps=array();
+    $id_fournisseur=$_POST['id_fournisseur'];
+    $nomA=trim(addslashes($_POST['article']));
+    $quantite=intval($_POST['quantite']);
+    $stock=new \app\DefaultApp\Models\Stock();
+    $stock=$stock->rechercherParNom($nomA);
+    if($stock==null){
+        $rps['statut']="no";
+        $rps['value']="Aucun article trouver pour ce nom";
+        echo json_encode($rps);
+        return;
+    }
+    $achat=new \app\DefaultApp\Models\Achat();
+    $date=date("Y-m-d");
+    $achat->setDate($date);
+    $achat->setIdFournisseur($id_fournisseur);
+    $achat->setStatut("encour");
+
+    if(isset($_POST['id_achat'])){
+        $id_achat=$_POST['id_achat'];
+        $mv="ok";
+    }else {
+        if (\app\DefaultApp\Models\Achat::existe($id_fournisseur, $date)) {
+            $achat = \app\DefaultApp\Models\Achat::rechercherParFournisseurNonFinaliser($id_fournisseur, $date);
+            $id_achat = $achat->getId();
+            $mv = "ok";
+        } else {
+            $mv = $achat->add();
+            $id_achat = \app\DefaultApp\Models\Achat::dernierId($id_fournisseur);
+        }
+    }
+
+    if($mv=="ok"){
+        $itemAchat=new \app\DefaultApp\Models\ItemAchat();
+        $itemAchat->setIdAchat($id_achat);
+        $itemAchat->setIdProduit($stock->getId());
+        $itemAchat->setQuantite($quantite);
+        $itemAchat->setPrix($stock->getPrix());
+        $mit=$itemAchat->add();
+        if($mit=="ok"){
+            $did=\app\DefaultApp\Models\ItemAchat::dernierId($id_achat);
+            $soutotal=floatval($stock->getPrix()*$quantite);
+            $soutotal1=\app\DefaultApp\Models\ItemAchat::sousTotal($id_achat);
+            $total=$soutotal1;
+            $rps['statut']="ok";
+            $rps['date']=$date;
+            $rps['order_id']=$id_achat;
+            $rps['sous_total']=\app\DefaultApp\DefaultApp::formatComptable($soutotal1);
+            $rps['total']=\app\DefaultApp\DefaultApp::formatComptable($total);
+            $prix=\app\DefaultApp\DefaultApp::formatComptable($stock->getPrix());
+            $soutotal=\app\DefaultApp\DefaultApp::formatComptable($soutotal);
+            $ligne="<tr><td><a href='?sup={$did}'><i class='fa fa-trash'></i></a> {$stock->getNom()}</td><td>{$stock->getDescription()}</td><td class='update_quantite_achat' data-id='{$did}' data-id_achat='{$id_achat}' contenteditable='true'>{$quantite}</td><td>{$prix}</td><td>{$soutotal}</td></tr>";
+            $rps['ligne']=$ligne;
+            echo json_encode($rps);
+            return;
+        }else{
+            $rps['statut']="no";
+            $rps['value']=$mit;
+            echo json_encode($rps);
+            return;
+        }
+    }else{
+        $rps['statut']="no";
+        $rps['value']=$mv;
+        echo json_encode($rps);
+        return;
+    }
+
+
+}
+
+if(isset($_GET['finaliser_achat'])){
+    $id=$_GET['id'];
+    $achat=new \app\DefaultApp\Models\Achat();
+    $achat=$achat->findById($id);
+    $achat->setStatut("finaliser");
+    $liste=\app\DefaultApp\Models\ItemAchat::listerParAchat($id);
+    $mv=$achat->update();
+    $m="ok";
+    if($mv=="ok") {
+        foreach ($liste as $l) {
+            $id_service = \app\DefaultApp\Models\Service::idService("stock");
+            \app\DefaultApp\Models\RepartitionStock::augementer($id_service, $l->getIdProduit(), $l->getQuantite(), \systeme\Model\Utilisateur::session_valeur(),"achat");
+            $m = \app\DefaultApp\Models\Stock::updateStock($l->getIdProduit());
+        }
+
+    }else{
+        echo $mv;
+    }
+    echo $m;
 }

@@ -4,7 +4,9 @@
 namespace app\DefaultApp\Controlleurs;
 
 
+use app\DefaultApp\Models\Achat;
 use app\DefaultApp\Models\Client;
+use app\DefaultApp\Models\Fournisseur;
 use app\DefaultApp\Models\Vente;
 use systeme\Controlleur\Controlleur;
 
@@ -26,6 +28,22 @@ class PrintControlleur extends Controlleur
         }
 
         $this->render("print/invoice",$var);
+    }
+
+    public function imprimerAchat($id_achat){
+        $var['titre']="";
+        $achat=new Achat();
+        $achat=$achat->findById($id_achat);
+        if($achat!=null){
+            $fournisseur=new Fournisseur();
+            $fournisseur=$fournisseur->findById($achat->getIdFournisseur());
+            if($fournisseur!=null){
+                $var['fournisseur']=$fournisseur;
+                $var['dernierAchat']=$achat;
+            }
+        }
+
+        $this->render("print/invoice_achat",$var);
     }
 
 }

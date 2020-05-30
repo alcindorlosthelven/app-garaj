@@ -11,6 +11,26 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Dumping structure for table app-garaj.achat
+DROP TABLE IF EXISTS `achat`;
+CREATE TABLE IF NOT EXISTS `achat` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_fournisseur` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `statut` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_achat_fournisseur` (`id_fournisseur`),
+  CONSTRAINT `FK_achat_fournisseur` FOREIGN KEY (`id_fournisseur`) REFERENCES `fournisseur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table app-garaj.achat: ~0 rows (approximately)
+DELETE FROM `achat`;
+/*!40000 ALTER TABLE `achat` DISABLE KEYS */;
+INSERT INTO `achat` (`id`, `id_fournisseur`, `date`, `statut`) VALUES
+	(7, 2, '2020-05-29', 'finaliser'),
+	(8, 2, '2020-05-29', 'finaliser');
+/*!40000 ALTER TABLE `achat` ENABLE KEYS */;
+
 -- Dumping structure for table app-garaj.client
 DROP TABLE IF EXISTS `client`;
 CREATE TABLE IF NOT EXISTS `client` (
@@ -30,7 +50,8 @@ CREATE TABLE IF NOT EXISTS `client` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.client: ~2 rows (approximately)
+-- Dumping data for table app-garaj.client: ~0 rows (approximately)
+DELETE FROM `client`;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
 INSERT INTO `client` (`id`, `nom`, `prenom`, `telephone`, `email`, `photo`, `date_naissance`, `cin`, `nif`, `actif`, `pseudo`, `password`, `adresse`) VALUES
 	(6, 'alcindor', 'losthelven', '(+509)3739-15-67', 'alcindorlos@gmail.com', 'app/DefaultApp/public/fichier/photo_alcindorlosthelven.png', '14/11/1993', '54-65-46-5465-46-54654', '646-546-546-5', 'non', 'lalcindor54', '63982e54a7aeb0d89910475ba6dbd3ca6dd4e5a1', '10 fontamara 29'),
@@ -49,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `configuration` (
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.configuration: 4 rows
+DELETE FROM `configuration`;
 /*!40000 ALTER TABLE `configuration` DISABLE KEYS */;
 INSERT INTO `configuration` (`id`, `nom`, `valeur`, `categorie`) VALUES
 	(1, 'licence_email', 'los-framework@gmail.com', 'non_modifiable'),
@@ -71,7 +93,8 @@ CREATE TABLE IF NOT EXISTS `conjointe_employer` (
   CONSTRAINT `FK_conjoint_employer_employer` FOREIGN KEY (`id_employer`) REFERENCES `employer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.conjointe_employer: ~1 rows (approximately)
+-- Dumping data for table app-garaj.conjointe_employer: ~0 rows (approximately)
+DELETE FROM `conjointe_employer`;
 /*!40000 ALTER TABLE `conjointe_employer` DISABLE KEYS */;
 INSERT INTO `conjointe_employer` (`id`, `id_employer`, `nom`, `prenom`, `relation`, `telephone`) VALUES
 	(3, 9, 'jhjkhjkh', 'jhjkhkjh', 'kjhjkhkj', '(+897)8978-90-79');
@@ -90,6 +113,7 @@ CREATE TABLE IF NOT EXISTS `document_employer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.document_employer: ~0 rows (approximately)
+DELETE FROM `document_employer`;
 /*!40000 ALTER TABLE `document_employer` DISABLE KEYS */;
 /*!40000 ALTER TABLE `document_employer` ENABLE KEYS */;
 
@@ -123,7 +147,8 @@ CREATE TABLE IF NOT EXISTS `employer` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.employer: ~1 rows (approximately)
+-- Dumping data for table app-garaj.employer: ~0 rows (approximately)
+DELETE FROM `employer`;
 /*!40000 ALTER TABLE `employer` DISABLE KEYS */;
 INSERT INTO `employer` (`id`, `nom`, `prenom`, `sexe`, `date_naissance`, `nif`, `cin`, `adresse`, `telephone`, `email`, `religion`, `statut_matrimonial`, `date_entrer_en_travail`, `poste`, `service`, `type_contrat`, `actif`, `pinactif`, `date_inactif`, `user_inactif`, `identifiant`, `role`, `password`, `photo`) VALUES
 	(9, 'thomas', 'farana', 'masculin', '12/11/1111', '454-654-654-6', '56-46-54-5645-64-56456', 'delmas 45', '(+465)4656-54-65', 'dddd@gmail.com', 'n/a', 'cÃ©libataire', '90/89/0890', 'technicien', '2', 'xxx', 'non', 'null', 'null', 'null', 'fthomas 76', 'technicien', '2050d5887decbeb375491e3f3859bcd79c0c097d', 'null');
@@ -149,9 +174,10 @@ CREATE TABLE IF NOT EXISTS `entrer_sortie` (
   KEY `FK_entrer_sortie_service` (`location`),
   CONSTRAINT `FK_entrer_sortie_service` FOREIGN KEY (`location`) REFERENCES `service` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_entrer_sortie_stock` FOREIGN KEY (`item`) REFERENCES `stock` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.entrer_sortie: ~9 rows (approximately)
+-- Dumping data for table app-garaj.entrer_sortie: ~8 rows (approximately)
+DELETE FROM `entrer_sortie`;
 /*!40000 ALTER TABLE `entrer_sortie` DISABLE KEYS */;
 INSERT INTO `entrer_sortie` (`id`, `item`, `no_transaction`, `type_transaction`, `date`, `location`, `quantite_avant`, `quantite`, `quantite_apres`, `raison`, `destination`, `user`) VALUES
 	(1, 4, '33416', 'Ajout Item', '2020-05-24 05:57:56', 3, 0, '1000', 1000, '', '', ''),
@@ -162,8 +188,57 @@ INSERT INTO `entrer_sortie` (`id`, `item`, `no_transaction`, `type_transaction`,
 	(7, 4, 'A-185460', 'Augementation Stock', '2020-05-24 08:03:49', 3, 1005, '100', 1105, '', '', ''),
 	(8, 6, '907810', 'Ajout Item', '2020-05-26 02:42:00', 3, 0, '1000', 1000, '', '', ''),
 	(9, 7, '01129', 'Ajout Item', '2020-05-26 02:42:45', 3, 0, '1000', 1000, '', '', ''),
-	(10, 8, '781822', 'Ajout Item', '2020-05-26 02:43:38', 3, 0, '1000', 1000, '', '', '');
+	(10, 8, '781822', 'Ajout Item', '2020-05-26 02:43:38', 3, 0, '1000', 1000, '', '', ''),
+	(11, 7, 'A-790892', 'Augementation Stock', '2020-05-29 10:19:15', 3, 1000, '10', 1010, 'achat', '', ''),
+	(12, 6, 'A-773928', 'Augementation Stock', '2020-05-29 10:19:15', 3, 1000, '10', 1010, 'achat', '', ''),
+	(13, 7, 'A-444904', 'Augementation Stock', '2020-05-29 10:24:21', 3, 1000, '10', 1010, 'achat', '', ''),
+	(14, 6, 'A-687378', 'Augementation Stock', '2020-05-29 10:24:21', 3, 1000, '10', 1010, 'achat', '', ''),
+	(15, 7, 'A-636072', 'Augementation Stock : achat', '2020-05-29 10:43:57', 3, 1010, '10', 1020, 'achat', '', ''),
+	(16, 6, 'A-601474', 'Augementation Stock : achat', '2020-05-29 10:43:57', 3, 1010, '10', 1020, 'achat', '', ''),
+	(17, 5, 'A-626766', 'Augementation Stock : achat', '2020-05-29 10:43:57', 3, 100, '10', 110, 'achat', '', '');
 /*!40000 ALTER TABLE `entrer_sortie` ENABLE KEYS */;
+
+-- Dumping structure for table app-garaj.fournisseur
+DROP TABLE IF EXISTS `fournisseur`;
+CREATE TABLE IF NOT EXISTS `fournisseur` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(50) DEFAULT NULL,
+  `telephone` varchar(50) DEFAULT NULL,
+  `adresse` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `statut` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table app-garaj.fournisseur: ~1 rows (approximately)
+DELETE FROM `fournisseur`;
+/*!40000 ALTER TABLE `fournisseur` DISABLE KEYS */;
+INSERT INTO `fournisseur` (`id`, `nom`, `telephone`, `adresse`, `email`, `statut`) VALUES
+	(2, 'jean multi services', '(+509)4444-44-44', 'delmas 15 no 10', 'multi@gmail.com', 'actif');
+/*!40000 ALTER TABLE `fournisseur` ENABLE KEYS */;
+
+-- Dumping structure for table app-garaj.fournisseur_contact
+DROP TABLE IF EXISTS `fournisseur_contact`;
+CREATE TABLE IF NOT EXISTS `fournisseur_contact` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `id_fournisseur` int(20) NOT NULL,
+  `nom` varchar(50) DEFAULT NULL,
+  `poste` varchar(50) DEFAULT NULL,
+  `telephone` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `FK_fournisseur_contact_fournisseur` (`id_fournisseur`),
+  CONSTRAINT `FK_fournisseur_contact_fournisseur` FOREIGN KEY (`id_fournisseur`) REFERENCES `fournisseur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table app-garaj.fournisseur_contact: ~3 rows (approximately)
+DELETE FROM `fournisseur_contact`;
+/*!40000 ALTER TABLE `fournisseur_contact` DISABLE KEYS */;
+INSERT INTO `fournisseur_contact` (`id`, `id_fournisseur`, `nom`, `poste`, `telephone`, `email`) VALUES
+	(4, 2, 'alcindor losthelven', 'directeur', '(+509)4444-44-44', 'alcindorlos@gmail.com'),
+	(5, 2, 'thomas farana', 'secretaire', '509444444444', 'thomasfarana@gmail.com'),
+	(6, 2, 'louis merlin john', 'testeur', '509445552145', 'testeur@gmail.com');
+/*!40000 ALTER TABLE `fournisseur_contact` ENABLE KEYS */;
 
 -- Dumping structure for table app-garaj.historique
 DROP TABLE IF EXISTS `historique`;
@@ -177,7 +252,8 @@ CREATE TABLE IF NOT EXISTS `historique` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.historique: ~9 rows (approximately)
+-- Dumping data for table app-garaj.historique: ~8 rows (approximately)
+DELETE FROM `historique`;
 /*!40000 ALTER TABLE `historique` DISABLE KEYS */;
 INSERT INTO `historique` (`id`, `user`, `ip`, `action`, `date`, `heure`) VALUES
 	(1, 'null', '::1', 'Ajouter employer', '2020-24-05', '04:11:38'),
@@ -211,6 +287,7 @@ CREATE TABLE IF NOT EXISTS `inventaire` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.inventaire: ~4 rows (approximately)
+DELETE FROM `inventaire`;
 /*!40000 ALTER TABLE `inventaire` DISABLE KEYS */;
 INSERT INTO `inventaire` (`id`, `service`, `item`, `date`, `qt_avant`, `qt_apres`, `remarque`, `user`) VALUES
 	(1, 3, 4, '2020-05-24', 1000, 1000, 'ok', NULL),
@@ -218,6 +295,32 @@ INSERT INTO `inventaire` (`id`, `service`, `item`, `date`, `qt_avant`, `qt_apres
 	(3, 3, 4, '2020-05-24', 850, 1000, 'ok', NULL),
 	(4, 3, 4, '2020-05-24', 1000, 1005, 'ok', NULL);
 /*!40000 ALTER TABLE `inventaire` ENABLE KEYS */;
+
+-- Dumping structure for table app-garaj.item_achat
+DROP TABLE IF EXISTS `item_achat`;
+CREATE TABLE IF NOT EXISTS `item_achat` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_achat` bigint(20) NOT NULL,
+  `id_produit` int(11) NOT NULL,
+  `quantite` int(11) DEFAULT NULL,
+  `prix` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_item_achat_achat` (`id_achat`),
+  KEY `FK_item_achat_stock` (`id_produit`),
+  CONSTRAINT `FK_item_achat_achat` FOREIGN KEY (`id_achat`) REFERENCES `achat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_item_achat_stock` FOREIGN KEY (`id_produit`) REFERENCES `stock` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table app-garaj.item_achat: ~0 rows (approximately)
+DELETE FROM `item_achat`;
+/*!40000 ALTER TABLE `item_achat` DISABLE KEYS */;
+INSERT INTO `item_achat` (`id`, `id_achat`, `id_produit`, `quantite`, `prix`) VALUES
+	(8, 7, 7, 10, '70000'),
+	(9, 7, 6, 10, '50000'),
+	(10, 8, 7, 10, '70000'),
+	(11, 8, 6, 10, '50000'),
+	(12, 8, 5, 10, '100.00');
+/*!40000 ALTER TABLE `item_achat` ENABLE KEYS */;
 
 -- Dumping structure for table app-garaj.item_vente
 DROP TABLE IF EXISTS `item_vente`;
@@ -232,16 +335,21 @@ CREATE TABLE IF NOT EXISTS `item_vente` (
   KEY `FK_item_vente_stock` (`id_produit`),
   CONSTRAINT `FK_item_vente_stock` FOREIGN KEY (`id_produit`) REFERENCES `stock` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_item_vente_vente` FOREIGN KEY (`id_vente`) REFERENCES `vente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.item_vente: ~5 rows (approximately)
+DELETE FROM `item_vente`;
 /*!40000 ALTER TABLE `item_vente` DISABLE KEYS */;
 INSERT INTO `item_vente` (`id`, `id_vente`, `id_produit`, `prix`, `quantite`) VALUES
 	(57, 26, 7, '70000', 1),
-	(58, 27, 6, '50000', 10),
 	(59, 27, 7, '70000', 2),
-	(60, 28, 7, '70000', 1),
-	(61, 28, 6, '50000', 2);
+	(61, 28, 6, '50000', 2),
+	(62, 27, 6, '50000', 1),
+	(63, 29, 7, '70000', 1),
+	(64, 29, 6, '50000', 1),
+	(65, 30, 5, '100.00', 1),
+	(66, 30, 7, '70000', 1),
+	(67, 30, 6, '50000', 1);
 /*!40000 ALTER TABLE `item_vente` ENABLE KEYS */;
 
 -- Dumping structure for table app-garaj.personne_prevenir_employer
@@ -258,7 +366,8 @@ CREATE TABLE IF NOT EXISTS `personne_prevenir_employer` (
   CONSTRAINT `FK_personne_a_prevenire_employer_employer` FOREIGN KEY (`id_employer`) REFERENCES `employer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.personne_prevenir_employer: ~1 rows (approximately)
+-- Dumping data for table app-garaj.personne_prevenir_employer: ~0 rows (approximately)
+DELETE FROM `personne_prevenir_employer`;
 /*!40000 ALTER TABLE `personne_prevenir_employer` DISABLE KEYS */;
 INSERT INTO `personne_prevenir_employer` (`id`, `id_employer`, `nom`, `prenom`, `telephone`, `relation`) VALUES
 	(3, 9, 'kjlkjlkj', 'kljlkjklj', '(+434)5353-45-34', 'kljkljklj');
@@ -279,12 +388,13 @@ CREATE TABLE IF NOT EXISTS `repartition_stock` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.repartition_stock: ~5 rows (approximately)
+DELETE FROM `repartition_stock`;
 /*!40000 ALTER TABLE `repartition_stock` DISABLE KEYS */;
 INSERT INTO `repartition_stock` (`id`, `service`, `item`, `quantite`) VALUES
 	(1, 3, 4, 1105),
-	(2, 3, 5, 100),
-	(3, 3, 6, 1000),
-	(4, 3, 7, 1000),
+	(2, 3, 5, 110),
+	(3, 3, 6, 1020),
+	(4, 3, 7, 1020),
 	(5, 3, 8, 1000);
 /*!40000 ALTER TABLE `repartition_stock` ENABLE KEYS */;
 
@@ -297,7 +407,8 @@ CREATE TABLE IF NOT EXISTS `service` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.service: ~3 rows (approximately)
+-- Dumping data for table app-garaj.service: ~2 rows (approximately)
+DELETE FROM `service`;
 /*!40000 ALTER TABLE `service` DISABLE KEYS */;
 INSERT INTO `service` (`id`, `sigle`, `definition`) VALUES
 	(1, 'vente', ''),
@@ -334,12 +445,13 @@ CREATE TABLE IF NOT EXISTS `stock` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.stock: ~5 rows (approximately)
+DELETE FROM `stock`;
 /*!40000 ALTER TABLE `stock` DISABLE KEYS */;
 INSERT INTO `stock` (`id`, `code`, `groupe`, `categorie`, `nom`, `nom_alternatif`, `description`, `entrer_par`, `quantite_par_type`, `retirer_par`, `total_type`, `total_unite`, `cout`, `prix`, `quantite_maximale`, `quantite_critique`, `user`, `actif`, `type`, `date_expiration`) VALUES
 	(4, '1234', 'piece automobil', 'null', 'refracteur', 'piece', 'lds;jkflsdkfjlsdkjflkds', 'unite', '1000', 'unite', '1105', '1105', '750.00', '750.00', '1000', '50', 'null', 'oui', 'null', '12/12/1990'),
-	(5, '6675', 'piece automobil', 'null', 'bougie', 'bougie', 'khkjkhj', 'unite', '87', 'unite', '100', '100', '100.00', '100.00', '78678', '77', 'null', 'oui', 'vendu', '12/12/1990'),
-	(6, 'mc-543', 'piece automobil', NULL, 'macbook pro n-89', 'macbook', 'apple ordinateur', 'unite', '1000', 'unite', '1000', '1000', '50000', '50000', '1000', '5', 'null', 'oui', 'vendu', '12/12/1990'),
-	(7, 'mc-878', 'piece automobil', NULL, 'macbook pro n-50', 'macbook', 'macbook', 'unite', '1000', 'unite', '1000', '1000', '70000', '70000', '1000', '10', 'null', 'oui', 'vendu', '12/12/1990'),
+	(5, '6675', 'piece automobil', 'null', 'bougie', 'bougie', 'khkjkhj', 'unite', '87', 'unite', '110', '110', '100.00', '100.00', '78678', '77', 'null', 'oui', 'vendu', '12/12/1990'),
+	(6, 'mc-543', 'piece automobil', NULL, 'macbook pro n-89', 'macbook', 'apple ordinateur', 'unite', '1000', 'unite', '1020', '1020', '50000', '50000', '1000', '5', 'null', 'oui', 'vendu', '12/12/1990'),
+	(7, 'mc-878', 'piece automobil', NULL, 'macbook pro n-50', 'macbook', 'macbook', 'unite', '1000', 'unite', '1020', '1020', '70000', '70000', '1000', '10', 'null', 'oui', 'vendu', '12/12/1990'),
 	(8, 'del-89', 'piece automobil', NULL, 'dell inspiron 500', 'dell pc', 'ordinateur portable', 'unite', '1000', 'unite', '1000', '1000', '752000', '752000', '1000', '10', 'null', 'oui', 'vendu', '12/12/1990');
 /*!40000 ALTER TABLE `stock` ENABLE KEYS */;
 
@@ -363,6 +475,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table app-garaj.utilisateur: 1 rows
+DELETE FROM `utilisateur`;
 /*!40000 ALTER TABLE `utilisateur` DISABLE KEYS */;
 INSERT INTO `utilisateur` (`id`, `pseudo`, `email`, `role`, `nom`, `prenom`, `motdepasse`, `active`, `statut`, `telephone`, `photo`, `id_session`) VALUES
 	(1, 'admin', 'admin@gmail.com', 'admin', NULL, NULL, 'd033e22ae348aeb5660fc2140aec35850c4da997', 'oui', '0', NULL, NULL, NULL);
@@ -382,14 +495,17 @@ CREATE TABLE IF NOT EXISTS `vente` (
   PRIMARY KEY (`id`),
   KEY `FK_vente_client` (`id_client`),
   CONSTRAINT `FK_vente_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
--- Dumping data for table app-garaj.vente: ~3 rows (approximately)
+-- Dumping data for table app-garaj.vente: ~4 rows (approximately)
+DELETE FROM `vente`;
 /*!40000 ALTER TABLE `vente` DISABLE KEYS */;
 INSERT INTO `vente` (`id`, `id_client`, `numero`, `date`, `date_paiement`, `payer`, `taxe`, `deduction`) VALUES
 	(26, 6, '86524210979', '2020-05-26', '2020-05-26', 'oui', '5.6', '0'),
-	(27, 7, '53581827823', '2020-05-26', 'n/a', 'non', '5.6', '0'),
-	(28, 6, '35258761904', '2020-05-27', 'n/a', 'non', '5.6', '0');
+	(27, 7, '53581827823', '2020-05-26', '2020-05-29', 'oui', '5.6', '0'),
+	(28, 6, '35258761904', '2020-05-27', '2020-05-29', 'oui', '5.6', '0'),
+	(29, 6, '93426253564', '2020-05-29', '2020-05-29', 'oui', '5.6', '0'),
+	(30, 7, '59183885175', '2020-05-29', 'n/a', 'non', '5.6', '0');
 /*!40000 ALTER TABLE `vente` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

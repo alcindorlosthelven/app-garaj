@@ -39,6 +39,38 @@ $("document").ready(function (e) {
 
     });
 
+    $(".finaliser_achat").on("click", function (e) {
+        $("#load").show();
+        if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
+            e.preventDefault();
+            let id = $(this).data("id");
+            $.ajax({
+                url: "app/DefaultApp/traitements/vente.php?id="+id+"&finaliser_achat",
+                type: "GET",
+                data: "",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (data) {
+                    //$(".message").html(data);
+                    if(data.trim()=="ok") {
+                        toastr.success("Finaliser Avec success");
+                        setTimeout(function () {
+                            location.reload(true);
+                        }, 4000);
+
+                    }else{
+                        toastr.warning(data);
+                    }
+                }
+            });
+        } else {
+            toastr.success("Action annuler avec success");
+            e.preventDefault();
+        }
+        $("#load").hide();
+    });
+
     $(".supprimer").on("click", function (e) {
         $("#load").show();
         if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
@@ -68,7 +100,6 @@ $("document").ready(function (e) {
     });
 
     $(".add_article").on("submit", function (e) {
-
         e.preventDefault();
         $("#load").show();
         $.ajax({
@@ -85,10 +116,7 @@ $("document").ready(function (e) {
                 if (data.statut == "ok") {
                     $("#t>tbody:last").append(data.ligne);
                     $("#date").html(data.date);
-                    $("#invoice").html(data.invoice);
                     $("#order_id").html(data.order_id);
-                    $("#tax").html(data.tax);
-                    $("#vtax").html(data.vtax);
                     $("#sous_total").html(data.sous_total);
                     $("#total").html(data.total);
                     toastr.success("Ajouter avec success");

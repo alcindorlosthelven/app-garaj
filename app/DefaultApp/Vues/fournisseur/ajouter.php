@@ -48,7 +48,7 @@
 
                             <div class="form-group">
                                 <label>Téléphone</label>
-                                <input type="text" name="telephone" class="form-control" required>
+                                <input type="text" name="telephone" class="form-control telephone" required>
                             </div>
 
                         </div>

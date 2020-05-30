@@ -3,6 +3,15 @@ use app\DefaultApp\DefaultApp as App;
 App::get("/", "utilisateur.lister", "index");
 App::post("/", "utilisateur.lister","index_post");
 
+//depense
+App::get("/depense", "depense.lister", "depense");
+App::get("/ajouter-depense", "depense.ajouter", "ajouter_depense");
+App::post("/ajouter-depense", "depense.ajouter", "ajouter_depense");
+App::get("/lister-depense", "depense.lister", "lister_depense");
+App::get("/modifier-depense-:id", "depense.modifier", "modifier_depense")->avec("id","[0-9]+");
+App::post("/modifier-depense-:id", "depense.modifier", "modifier_depense")->avec("id","[0-9]+");
+//fin depense
+
 //client
 App::get("/client", "client.lister", "client");
 App::get("/ajouter-client", "client.ajouter", "ajouter_client");
@@ -12,6 +21,7 @@ App::get("/modifier-client-:id", "client.modifier", "modifier_client")->avec("id
 App::post("/modifier-client-:id", "client.modifier", "modifier_client")->avec("id","[0-9]+");
 App::get("/fiche-client-:id", "client.fiche", "fiche_client")->avec("id","[0-9]+");
 //fin client
+
 
 //vente
 App::get("/vente", "vente.lister", "vente");

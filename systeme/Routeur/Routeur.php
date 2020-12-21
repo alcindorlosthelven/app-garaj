@@ -109,7 +109,7 @@ class Routeur
     private function isActive()
     {
         try{
-            if($this->isInstall() and Application::isConnectedToInternet()) {
+            /*if($this->isInstall() and Application::isConnectedToInternet()) {
                 $email_instalation = Model::getValueOfConfiguraton("licence_email");
                 $code_instalation = Model::getValueOfConfiguraton("licence_code");
                 $curlService = new \Ixudra\Curl\CurlService();
@@ -139,6 +139,7 @@ class Routeur
                     return false;
                 }
             }
+            */
 
           /*  if (file_exists(__DIR__ . "/route_routeur.ap.sys.ap")) {
                 $file = fopen(__DIR__ . "/route_routeur.ap.sys.ap", "r");

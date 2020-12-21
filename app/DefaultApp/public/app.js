@@ -39,39 +39,9 @@ $("document").ready(function (e) {
 
     });
 
-    $(".finaliser_achat").on("click", function (e) {
-        $("#load").show();
-        if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
-            e.preventDefault();
-            let id = $(this).data("id");
-            $.ajax({
-                url: "app/DefaultApp/traitements/vente.php?id="+id+"&finaliser_achat",
-                type: "GET",
-                data: "",
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (data) {
-                    //$(".message").html(data);
-                    if(data.trim()=="ok") {
-                        toastr.success("Finaliser Avec success");
-                        setTimeout(function () {
-                            location.reload(true);
-                        }, 4000);
 
-                    }else{
-                        toastr.warning(data);
-                    }
-                }
-            });
-        } else {
-            toastr.success("Action annuler avec success");
-            e.preventDefault();
-        }
-        $("#load").hide();
-    });
 
-    $(".supprimer").on("click", function (e) {
+    $(".xas").on("click", function (e) {
         $("#load").show();
         if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
             e.preventDefault();

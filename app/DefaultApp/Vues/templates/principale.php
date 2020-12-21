@@ -149,6 +149,66 @@ use systeme\Application\Application as App;
     $("document").ready(function () {
         $("form").addClass("was-validated");
 
+        $(".finaliser_achat").on("click", function (e) {
+            $("#load").show();
+            if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
+                e.preventDefault();
+                let id = $(this).data("id");
+                $.ajax({
+                    url: "app/DefaultApp/traitements/vente.php?id="+id+"&finaliser_achat",
+                    type: "GET",
+                    data: "",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        //$(".message").html(data);
+                        if(data.trim()=="ok") {
+                            toastr.success("Finaliser Avec success");
+                            setTimeout(function () {
+                                location.reload(true);
+                            }, 4000);
+
+                        }else{
+                            toastr.warning(data);
+                        }
+                    }
+                });
+            } else {
+                toastr.success("Action annuler avec success");
+                e.preventDefault();
+            }
+            $("#load").hide();
+        });
+
+        $(".finaliser_vente").on("click", function (e) {
+
+            if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
+                $("#load").show();
+                e.preventDefault();
+                let id = $(this).data("id");
+                $.ajax({
+                    url: "app/DefaultApp/traitements/vente.php?id="+id+"&finaliser",
+                    type: "GET",
+                    data: "",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        $(".message").html(data);
+                        toastr.success("Facture Finaliser Avec success");
+                        setTimeout(function () {
+                            document.location.href="imprimer-facture-vente-"+id+"";
+                        },4000);
+                        $("#load").show();
+                    }
+                });
+            } else {
+                toastr.success("Action annuler avec success");
+                e.preventDefault();
+            }
+        });
+
     });
 
 
@@ -180,7 +240,6 @@ use systeme\Application\Application as App;
             reader.readAsDataURL(input.files[0]);
         }
     }
-
     $("#imgInp").change(function () {
         readURL(this);
     });

@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-md-12">
+        <div class="message"></div>
         <div class="no-print">
             <?= \systeme\Application\Application::block("menu_vente") ?>
         </div>
@@ -276,7 +277,7 @@
                             if (isset($dernierVente)) {
                                 if ($dernierVente->getPayer() == "non") {
                                     ?>
-                                    <a href="" type="button" class="supprimer btn btn-success float-right"
+                                    <a href="" type="button" class="finaliser_vente btn btn-success float-right"
                                        data-id="<?= $dernierVente->getId(); ?>"><i class="far fa-credit-card"></i>Finaliser
                                         Paiement</a>
                                     <?php

@@ -142,9 +142,9 @@
                     <div class="text-success text-center">
                         <?php
                         if($vente->getPayer()=="oui"){
-                            echo "<h3>Payer</h3>";
+                            echo "<h3>Payé</h3>";
                         }else{
-                            echo "<h3>Non Payer</h3>";
+                            echo "<h3>Non Payé</h3>";
                         }
                         ?>
                     </div>

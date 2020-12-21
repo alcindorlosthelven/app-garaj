@@ -91,9 +91,19 @@ if(isset($_GET['finaliser'])){
     $id=$_GET['id'];
     $vente=new \app\DefaultApp\Models\Vente();
     $vente=$vente->findById($id);
-    $vente->setPayer("oui");
-    $vente->setDatePaiement(date("Y-m-d"));
-    $vente->update();
+    if($vente->setPayer()==="non") {
+        $vente->setPayer("oui");
+        $vente->setDatePaiement(date("Y-m-d"));
+        $m = $vente->update();
+        if ($m == "ok") {
+            $liste = \app\DefaultApp\Models\ItemVente::listerParVente($vente->getId());
+            foreach ($liste as $l) {
+                $id_service = \app\DefaultApp\Models\Service::idService("stock");
+                \app\DefaultApp\Models\RepartitionStock::dimimuer($id_service, $l->getIdProduit(), $l->getQuantite(), \systeme\Model\Utilisateur::session_valeur(), "achat");
+                $m = \app\DefaultApp\Models\Stock::updateStock($l->getIdProduit());
+            }
+        }
+    }
 }
 
 if(isset($_POST['update_quantite'])){
@@ -115,7 +125,7 @@ if(isset($_POST['update_quantite'])){
         if($m=="ok"){
             $listeItem=\app\DefaultApp\Models\ItemVente::listerParVente($id_vente);
             $ligne="";
-            $tax=10;
+            $tax=0;
             foreach ($listeItem as $itv){
                 $quantite = $itv->getQuantite();
                 $prix = $itv->getPrix();

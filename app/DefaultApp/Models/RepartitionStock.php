@@ -259,14 +259,14 @@ class RepartitionStock extends Model
 
                 $role = "cusg,pharmacien,magasinier";
 
-                if ($quantite <= Stock::quantiteCritique($item)) {
+                /*if ($quantite <= Stock::quantiteCritique($item)) {
                     $alert=new Alert();
                     $alert->setRole($role);
                     $alert->setStatut("non");
                     $alert->setDate(date("Y-m-d h:i:s"));
                     $alert->setMessage("Quantité critique pour Item du nom " . addslashes(Stock::nomItem($item)) . "");
                     $m = $alert->ajouter();
-                }
+                }*/
 
                 return "ok";
             } else {

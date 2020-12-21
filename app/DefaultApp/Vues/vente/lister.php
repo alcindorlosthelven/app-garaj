@@ -20,14 +20,13 @@
 
                 if(isset($_GET['payer'])){
                     $listeVente=\app\DefaultApp\Models\Vente::listePayer();
-                    echo "<h4>Deja Payer</h4>";
+                    echo "<h4>Deja Payé</h4>";
                 }
 
                 if(isset($_GET['non_payer'])){
                     $listeVente=\app\DefaultApp\Models\Vente::listeNonPayer();
-                    echo "<h4>Non Payer</h4>";
+                    echo "<h4>Non Payé</h4>";
                 }
-
 
                 ?>
 

@@ -53,7 +53,6 @@ class VenteControlleur extends BaseControlleur
         $this->render("vente/facture_vente",$var);
     }
 
-
     public function lister(){
         $var['titre']="Liste des ventes";
         $vente=new Vente();

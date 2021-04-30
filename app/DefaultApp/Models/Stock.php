@@ -745,7 +745,6 @@ class Stock extends Model
         }
     }
 
-
     public static function statut($item, $statut)
     {
         $con=self::connection();
@@ -911,8 +910,6 @@ class Stock extends Model
         }
     }
 
-
-
     public static function updateCategorie($nouveauCategorie, $ancienCategorie)
     {
         $con=self::connection();
@@ -923,6 +920,5 @@ class Stock extends Model
             return "no";
         }
     }
-
 
 }

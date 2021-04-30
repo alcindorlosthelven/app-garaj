@@ -78,7 +78,6 @@ App::get("/nouveau-item", "stock.ajouter","nouveau_item");
 App::get("/liste-item", "stock.index","liste_item");
 App::get("/modifier-item-:id", "stock.modifier", "modifier_item")->avec("id", "['0-9']+");
 App::post("/modifier-item-:id", "stock.modifier", "modifier_item")->avec("id", "['0-9']+");
-
 App::get("/historique-item-:id", "stock.historiqueItem", "historique_item")->avec("id", "['0-9']+");
 App::get("/repartition-item-:id", "stock.repartition", "repartition_item")->avec("id", "['0-9']+");
 App::get("/repartition-item", "stock.repartition", "repartition_item");

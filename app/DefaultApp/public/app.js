@@ -39,8 +39,6 @@ $("document").ready(function (e) {
 
     });
 
-
-
     $(".xas").on("click", function (e) {
         $("#load").show();
         if (confirm("Êtes-vous sûr de vouloir continuer ?")) {
@@ -241,66 +239,7 @@ $("document").ready(function (e) {
 
     })
 
-    $(".formulaire_ajouter_medcin").on('submit', (function (e) {
-        e.preventDefault();
-        $("#load").show();
-        $.ajax({
-            url: "app/DefaultApp/traitements/medecin.php",
-            type: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-                if (data.trim() == "ok") {
-                    $(".message").html("<div class='alert alert-success'>Fait avec success</div>")
-                    alert("fait avec success");
-                    location.reload(true);
-                } else {
-                    $('.message').html("<div class='alert alert-warning'>" + data + "</div> ");
-                }
 
-                $("#load").hide();
-            }
-        });
-    }));
-
-    $(".f_ajout_document_pm").on('submit', (function (e) {
-        e.preventDefault();
-        $("#load").show();
-        $.ajax({
-            url: "app/DefaultApp/traitements/medecin.php",
-            type: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-                $(".t_document").empty();
-                $(".t_document").append(data);
-                $("#load").hide();
-            }
-        });
-    }));
-
-    $(".supdp").on("click", function () {
-        $("#load").show();
-        var id = $(this).data("id");
-        var id_pm = $(this).data("id_pm");
-        $.ajax({
-            url: "app/DefaultApp/traitements/medecin.php?supprimer_document&id=" + id + "&id_pm=" + id_pm + "&supe",
-            type: "POST",
-            data: "",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (datas) {
-                $(".t_document").empty();
-                $(".t_document").append(datas);
-                $("#load").hide();
-            }
-        });
-    });
 
     $(".btn_pr").on("click", function () {
 
